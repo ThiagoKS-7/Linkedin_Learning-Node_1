@@ -1,5 +1,24 @@
 {
   "dependencies": {
     "lodash": "^4.17.21"
-  }
+  },
+  "name": "linkedin_learning_node_1",
+  "description": "- [About](#about)\r - [Getting Started](#getting_started)\r - [Usage](#usage)\r - [Contributing](../CONTRIBUTING.md)",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoKS-7/Linkedin_Learning-Node-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThiagoKS-7/Linkedin_Learning-Node-1/issues"
+  },
+  "homepage": "https://github.com/ThiagoKS-7/Linkedin_Learning-Node-1#readme"
 }
