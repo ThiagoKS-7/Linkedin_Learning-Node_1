@@ -1,8 +1,10 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const routes = require("./routes/index.js");
 
 require('dotenv').config();
+app.use(bodyParser.json());
 app.use("/api/v1", routes);
 
 app.listen(process.env.API_PORT, () => {
