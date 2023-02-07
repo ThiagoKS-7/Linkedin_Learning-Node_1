@@ -2,6 +2,7 @@
   "dependencies": {
     "cucumber": "^6.0.7",
     "lodash": "^4.17.21",
+    "mongoose": "^6.9.1",
     "socket.io": "^4.5.4"
   },
   "name": "linkedin_learning_node_1",
