@@ -42,6 +42,12 @@ router.get("/messages", function (req, res) {
     res.send(messages);  
   })
 });
+router.get("/messages/:user", function (req, res) {
+  const user = req.params.user;
+  Message.find({name: user}, (err,messages) => {
+    res.send(messages);  
+  })
+});
 router.post("/messages", async function (req, res) {
   const conf = {
     abortEarly: false,
