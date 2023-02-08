@@ -4,28 +4,29 @@ const router = express.Router();
 const msgSchema = require('../validators/msgValidator.js')
 const io  = require('../socket.js');
 const mongoose = require('mongoose');
+mongoose.Promise = Promise;
 
-// const messages = []
 const Message = mongoose.model('Message', {
   name: String,
   message: String,
 })
 
-function handleValidation(req, res, conf) {
+async function handleValidation(req, res, conf) {
   try {
     const data = msgSchema.validate(req.body, conf);
+    var message = new Message(req.body);
     if (data) {
-      const message = new Message(data);
-      messages.save((err) => {
-        if (err) res.status(500);
-        io.emit('message', data);
-        messages.push(data);
-        return res.status(200).json({
-         message: "Success"
-        })
-      })
-    }
+        await message.save();
 
+        const censored =  await Message.findOne({message: 'badword'})   ;
+               
+        if (censored) return Message.deleteOne({_id: censored.id});
+
+        io.emit('message', data);
+        return res.status(200).json({
+          message: "Success"
+        })
+    }
   } 
   catch (e) {
     return res.status(422).json({
@@ -41,12 +42,12 @@ router.get("/messages", function (req, res) {
     res.send(messages);  
   })
 });
-router.post("/messages", function (req, res) {
+router.post("/messages", async function (req, res) {
   const conf = {
     abortEarly: false,
     stripUnknown: true,
   }
-  handleValidation(req, res, conf);
+  await handleValidation(req, res, conf);
 });
 
 module.exports = router;
