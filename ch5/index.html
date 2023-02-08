@@ -35,13 +35,35 @@
         $("#messages").append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
     }
     function getMessages(message){
-        $.get("http://localhost:3000/api/v1/messages", (data) => {
-            data.forEach(addMessage);
-        })
+        const settings = {
+            "url": "http://localhost:3000/api/v1/messages",
+            "method": "GET",
+            "timeout": 0,
+        };
+        
+        $.ajax(settings).done(function (response) {
+            response.forEach(el => {
+                addMessage(el);
+            })
+        });
     }
     function postMessages(message){
-        $.post("http://localhost:3000/api/v1/messages", message, (data) => {
-            addMessage(message);
-        })
+        const settings = {
+            "url": "http://localhost:3000/api/v1/messages",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(message),
+
+          };
+          
+          $.ajax(settings).done(function (response) {
+            if (message.message !== "badword") {
+                alert("1 new message!")
+                addMessage(message)
+            }
+          });
     }
 </script>
