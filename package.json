@@ -10,7 +10,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/ThiagoKS-7/Linkedin_Learning-Node-1/issues"
   },
-  "homepage": "https://github.com/ThiagoKS-7/Linkedin_Learning-Node-1#readme"
+  "homepage": "https://github.com/ThiagoKS-7/Linkedin_Learning-Node-1#readme",
+  "devDependencies": {
+    "jasmine": "^4.5.0",
+    "request": "^2.88.2"
+  }
 }
