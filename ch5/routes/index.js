@@ -1,47 +1,53 @@
 const express = require("express");
-const yup = require("yup");
 const {resolve} = require('path');
 const router = express.Router();
+const msgSchema = require('../validators/msgValidator.js')
 const io  = require('../socket.js');
+const mongoose = require('mongoose');
+mongoose.Promise = Promise;
 
-
-const messages = []
-
-const msgSchema = yup.object({
-  name: yup.string().min(0).max(50),
-  message: yup.string().min(0).max(10000),
+const Message = mongoose.model('Message', {
+  name: String,
+  message: String,
 })
 
-function handleValidation(req, res, conf) {
+async function handleValidation(req, res, conf) {
   try {
     const data = msgSchema.validate(req.body, conf);
-    io.emit('message', data);
-    messages.push(data);
-    return res.status(200).json({
-     message: "Success"
-    })
+    var message = new Message(req.body);
+    if (data) {
+        await message.save();
+
+        const censored =  await Message.findOne({message: 'badword'})   ;
+               
+        if (censored) return Message.deleteOne({_id: censored.id});
+
+        io.emit('message', data);
+        return res.status(200).json({
+          message: "Success"
+        })
+    }
   } 
   catch (e) {
-    console.log(e)
+    return res.status(422).json({
+      message: e
+     })
   }
 }
-io.on('connection', (socket) => {
-  console.log("user connected");
-})
-
-// Home page route.
 router.get("/", function (req, res) {
     res.sendFile(resolve("index.html"));
   });
 router.get("/messages", function (req, res) {
-  res.send(messages);
+  Message.find({}, (err,messages) => {
+    res.send(messages);  
+  })
 });
-router.post("/messages", function (req, res) {
+router.post("/messages", async function (req, res) {
   const conf = {
     abortEarly: false,
     stripUnknown: true,
   }
-  handleValidation(req, res, conf);
+  await handleValidation(req, res, conf);
 });
 
 module.exports = router;
